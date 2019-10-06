@@ -1,0 +1,14 @@
+{
+  "extends": "gts/tslint.json",
+  "rules": {
+    "interface-name": [true, "always-prefix"],
+    "no-any": false,
+    "no-default-export": false,
+    "no-inferrable-types": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "**/*.json"
+    ]
+  }
+}

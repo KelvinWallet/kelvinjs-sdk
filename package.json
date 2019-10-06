@@ -1,0 +1,44 @@
+{
+  "name": "kelvinjs-sdk",
+  "version": "1.0.0",
+  "description": "kelvinjs-sdk",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KelvinWallet/kelvinjs-sdk.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^2",
+    "kelvinjs-eth": "git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.0.0",
+    "kelvinjs-usbhid": "git+https://github.com/KelvinWallet/kelvinjs-usbhid.git#v1.0.0",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@types/node": "^10",
+    "gts": "^1.1.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  },
+  "scripts": {
+    "fix": "gts fix",
+    "lint": "gts check",
+    "build": "gts clean && tsc -p ."
+  },
+  "oclif": {
+    "bin": "kelvin"
+  },
+  "bin": {
+    "kelvin": "./bin/kelvin"
+  }
+}
