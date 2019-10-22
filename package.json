@@ -1,6 +1,6 @@
 {
   "name": "kelvinjs-sdk",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "kelvinjs-sdk",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -9,7 +9,7 @@
     "lib"
   ],
   "engines": {
-    "node": ">=10.0.0"
+    "node": "^10"
   },
   "repository": {
     "type": "git",
@@ -17,23 +17,23 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@oclif/command": "^1",
-    "@oclif/config": "^1",
-    "@oclif/plugin-help": "^2",
-    "kelvinjs-bch": "git+https://github.com/KelvinWallet/kelvinjs-bch.git#v1.0.1",
-    "kelvinjs-btc": "git+https://github.com/KelvinWallet/kelvinjs-btc.git#v1.0.0",
-    "kelvinjs-eth": "git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.1.1",
-    "kelvinjs-ltc": "git+https://github.com/KelvinWallet/kelvinjs-ltc.git#v1.0.1",
-    "kelvinjs-trx": "git+https://github.com/KelvinWallet/kelvinjs-trx.git#v1.0.1",
-    "kelvinjs-usbhid": "git+https://github.com/KelvinWallet/kelvinjs-usbhid.git#v1.0.0",
-    "kelvinjs-xrp": "git+https://github.com/KelvinWallet/kelvinjs-xrp.git#v1.0.0",
-    "tslib": "^1"
+    "@oclif/command": "1.5.19",
+    "@oclif/config": "1.13.3",
+    "@oclif/plugin-help": "2.2.1",
+    "kelvinjs-bch": "git+https://github.com/KelvinWallet/kelvinjs-bch.git#v1.0.2",
+    "kelvinjs-btc": "git+https://github.com/KelvinWallet/kelvinjs-btc.git#v1.0.1",
+    "kelvinjs-eth": "git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.1.2",
+    "kelvinjs-ltc": "git+https://github.com/KelvinWallet/kelvinjs-ltc.git#v1.0.2",
+    "kelvinjs-trx": "git+https://github.com/KelvinWallet/kelvinjs-trx.git#v1.0.2",
+    "kelvinjs-usbhid": "git+https://github.com/KelvinWallet/kelvinjs-usbhid.git#v1.0.1",
+    "kelvinjs-xrp": "git+https://github.com/KelvinWallet/kelvinjs-xrp.git#v1.0.1",
+    "tslib": "1.10.0"
   },
   "devDependencies": {
     "@types/node": "^10",
     "gts": "1.1.0",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.4"
+    "ts-node": "8.4.1",
+    "typescript": "3.6.4"
   },
   "scripts": {
     "fix": "gts fix",
