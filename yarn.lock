@@ -2529,9 +2529,9 @@ keccak@^1.0.2, keccak@^1.3.0:
     nan "^2.2.1"
     safe-buffer "^5.1.0"
 
-"kelvinjs-bch@git+https://github.com/KelvinWallet/kelvinjs-bch.git#v1.0.0":
-  version "1.0.0"
-  resolved "git+https://github.com/KelvinWallet/kelvinjs-bch.git#a36da23fd458cabd333733b7e51752b129e97c28"
+"kelvinjs-bch@git+https://github.com/KelvinWallet/kelvinjs-bch.git#v1.0.1":
+  version "1.0.1"
+  resolved "git+https://github.com/KelvinWallet/kelvinjs-bch.git#0301d3f83f083b6459880d97d946886c2cfb1e31"
   dependencies:
     bitbox-sdk "8.8.0"
     kelvinjs-protob "git+https://github.com/KelvinWallet/kelvinjs-protob.git#v1.0.0"
@@ -2547,9 +2547,9 @@ keccak@^1.0.2, keccak@^1.3.0:
     kelvinjs-protob "git+https://github.com/KelvinWallet/kelvinjs-protob.git#v1.0.0"
     secp256k1 "^3.7.1"
 
-"kelvinjs-eth@git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.1.0":
-  version "1.1.0"
-  resolved "git+https://github.com/KelvinWallet/kelvinjs-eth.git#720d726e6c3c788bfd92c9e88fe3b1ae8a66a9cf"
+"kelvinjs-eth@git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.1.1":
+  version "1.1.1"
+  resolved "git+https://github.com/KelvinWallet/kelvinjs-eth.git#0768ed0eab01b94a0846a5809caceba3ed0e56f1"
   dependencies:
     axios "0.19.0"
     ethereumjs-util "6.1.0"
@@ -2557,9 +2557,9 @@ keccak@^1.0.2, keccak@^1.3.0:
     rlp "2.2.3"
     web3 "1.0.0-beta.55"
 
-"kelvinjs-ltc@git+https://github.com/KelvinWallet/kelvinjs-ltc.git#v1.0.0":
-  version "1.0.0"
-  resolved "git+https://github.com/KelvinWallet/kelvinjs-ltc.git#0a000736ea2a8d0429a9c0926925b8496f0f70ea"
+"kelvinjs-ltc@git+https://github.com/KelvinWallet/kelvinjs-ltc.git#v1.0.1":
+  version "1.0.1"
+  resolved "git+https://github.com/KelvinWallet/kelvinjs-ltc.git#e228534cb10275ad2415e08d535930c668f27a1c"
   dependencies:
     axios "0.19.0"
     bech32 "1.1.3"
