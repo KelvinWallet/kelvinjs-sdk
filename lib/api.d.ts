@@ -1,15 +1,4 @@
 /// <reference types="node" />
-export interface ITransactionSchema {
-    key: string;
-    label: string;
-    format: 'address' | 'boolean' | 'date' | 'hash' | 'number' | 'string' | 'value';
-}
-export interface ITransaction {
-    [key: string]: {
-        value: string;
-        link?: string;
-    };
-}
 export interface IArmadilloCommand {
     commandId: number;
     payload: Buffer;
@@ -24,6 +13,17 @@ export interface ISignTxRequest {
     toAddr: string;
     amount: string;
     feeOpt?: string;
+}
+export interface ITransaction {
+    [key: string]: {
+        value: string;
+        link?: string;
+    };
+}
+export interface ITransactionSchema {
+    key: string;
+    label: string;
+    format: 'address' | 'boolean' | 'date' | 'hash' | 'number' | 'string' | 'value';
 }
 export interface ICurrencyUtil {
     getSupportedNetworks(): string[];

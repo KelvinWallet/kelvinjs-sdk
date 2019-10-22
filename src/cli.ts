@@ -56,12 +56,20 @@ class SampleCli extends Command {
     amount: flags.string({ default: '' }),
     fee: flags.string({ default: '' }),
     tx: flags.string({ default: '' }),
+    tokenaddr: flags.string({ default: '' }),
+    tokensymbol: flags.string({ default: '' }),
   };
 
   async run() {
     const { args, flags } = this.parse(SampleCli);
     const { currency, network, action } = args;
+
     const cur = getCurrency(currency);
+
+    // Extra setup for the instance of the ERC20 class
+    if (currency === 'erc20') {
+      cur.token = { address: flags.tokenaddr, symbol: flags.tokensymbol };
+    }
 
     if (!cur.getSupportedNetworks().includes(network)) {
       throw Error(`unsupported network ${network}`);
@@ -143,17 +151,6 @@ async function signtx(
   amount: string,
   fee: string
 ): Promise<void> {
-  // FIXME: Currently the eth implementation accept amount in normal unit
-  // instead of base unit.  Therefore doing this will generate errors:
-  //
-  //      amount: cur.convertNormAmountToBaseAmount(amount),
-  //
-  // TODO: Clarify how prepareCommandSignTx should behave and fix the
-  // implementations
-  //
-  //      Choise 1: All amounts should be represented in base unit
-  //      Choise 2: All amounts should be represented in normal unit
-  //
   const req: ISignTxRequest = {
     network,
     accountIndex: account,

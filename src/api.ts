@@ -1,15 +1,78 @@
 /**
- * This interface describes a column of an account history view.
+ * Represent a USB command to KelvinWallet.
+ */
+export interface IArmadilloCommand {
+  commandId: number;
+  payload: Buffer;
+}
+
+/**
+ * Represent a USB response from KelvinWallet.
+ */
+export interface IArmadilloResponse {
+  payload: Buffer;
+}
+
+/**
+ * Represent a transaction signing request.
  *
- * @property key: property/index to look up an IHistoryTransaction object
- * @property label: table first row, human readable string
- * @property format: date is format with iso string
+ * @param network - the network to use
+ * @param accountIndex - the index of an account (should be 0, 1, 2, 3, ...)
+ * @param fromPubkey - the 65-byte hex string of the secp256k1 public key
+ * @param toAddr - the address to which we send the money
+ * @param amount - the amount of money to send in normal unit (no wei/satoshi)
+ * @param feeOpt - the selected fee option (if the currency requires tx fee)
+ */
+export interface ISignTxRequest {
+  network: string;
+  accountIndex: number;
+  fromPubkey: string;
+  toAddr: string;
+  amount: string;
+  feeOpt?: string;
+}
+
+/**
+ * Represent the printable information about a transaction.
+ */
+export interface ITransaction {
+  [key: string]: {
+    value: string;
+    link?: string;
+  };
+}
+
+/**
+ * Represent the format of a single field of a printable transaction:
+ *
+ *      1. How to look up the field in an object of type ITransaction
+ *      2. The name of the field
+ *      3. The format of the field when rendering
+ *
+ * We use an array of ITransactionSchema to describe how to render a
+ * transaction.
+ *
+ * @param key - the key to look up an object of type ITransaction
+ * @param label - table first row, human readable string
+ * @param format - the type of the data
  *
  * The implementation may provide a column whose key and label are both
- * `"isConfirmed"`, and value must be either `"true"` or `"false"`.  When such
- * column exists, it SHALL be the last one in the array.
+ * `"isConfirmed"`, and whose value must be either `"true"` or `"false"`.
+ * When such column exists, it SHALL be the last one in the array.  Such
+ * column will be used by UI component when rendering.
  *
- * Date strings should conform to be ISO 8601 string and use UTC.
+ * Date strings should conform to ISO 8601 standard and use UTC timezone.
+ *
+ * In fact, we should probably refactor and rename this interface.
+ *
+ * We should not call this ITransactionSchema:
+ *
+ *      { key: string; label: string; format: string; }
+ *
+ * We should instead call this ITransactionSchema:
+ *
+ *      Array<{ key: string; label: string; format: string; }>
+ *
  */
 export interface ITransactionSchema {
   key: string;
@@ -25,56 +88,7 @@ export interface ITransactionSchema {
 }
 
 /**
- * This interface describes a row of an account history view.
- */
-export interface ITransaction {
-  [key: string]: {
-    value: string;
-    link?: string;
-  };
-}
-
-export interface IArmadilloCommand {
-  commandId: number;
-  payload: Buffer;
-}
-
-export interface IArmadilloResponse {
-  payload: Buffer;
-}
-
-/**
- *
- * @param network - the network to use
- * @param fromPubkey - the standard 65-byte hex string representation of the
- * secp256k1 public key
- * @param fromAddr - the address to send money from
- * @param toAddr - the address to send money to
- * @param amount - the amount of money to send (in the base unit)
- * @param feeOpt - the fee option user selected
- */
-export interface ISignTxRequest {
-  network: string;
-  accountIndex: number;
-  fromPubkey: string;
-  toAddr: string;
-  amount: string;
-  feeOpt?: string;
-}
-
-/**
- * This interface defines what a lower-level cryptocurrency module should
- * provide.
- *
- * Opt for simplicity at first.  Try to keep things dead simple.
- *
- * We can just use strings to represent many different kinds of information,
- * because most of the information we want to process is serializable.
- * Instead of complicated generic interface, we can simply use strings and get
- * the job done.
- *
- * We can review and refactor the interface and actual implementations in the
- * future any way.
+ * Lower-level cryptocurrency module.
  */
 export interface ICurrencyUtil {
   /**
@@ -82,11 +96,11 @@ export interface ICurrencyUtil {
    *
    * Most of the functions in this interface require a `network` argument.
    *
-   * The implementation MUST implement the case for network to be "mainnet".
-   * Testnets are optional, but we should implement at least one testnet.
+   * The implementation MUST implement at least one network "mainnet".
+   * Testnets are optional, but we SHOULD implement at least one testnet too.
    *
-   * For BTC/LTC/BCH/XRP/TRX, network must be either "mainnet" or "testnet".
-   * For ETH, network must be "mainnet", "kovan", "ropsten", or "rinkeby".
+   * For BTC/LTC/BCH/XRP/TRX, network should be either "mainnet" or "testnet".
+   * For ETH, network should be "mainnet", "kovan", "ropsten", or "rinkeby".
    *
    * @returns an array of strings, each represents a network choice.
    *
@@ -98,33 +112,34 @@ export interface ICurrencyUtil {
    *
    * We may choose to have implementations that do these:
    *
-   * - TRX: no fee option is available (so this function throws Error)
-   * - XRP: no fee option is available (so this function throws Error)
-   * - ETH: user can choose fee option with unit "Gwei"
    * - BTC: user can choose fee option with unit "sat/kB"
    * - LTC: user can choose fee option with unit "sat/kB"
    * - BCH: user can choose fee option with unit "sat/kB"
+   * - ETH: user can choose fee option with unit "Gwei"
+   * - TRX: no need to specify tx fee (so this function throws an Error)
+   * - XRP: no need to specify tx fee (so this function throws an Error)
    *
-   * @returns a string that is the display UI
-   * @throws Error if this currency does not have the concept of tx fee and
-   * therefore we don't need to display any in the UI
+   * @returns the display unit for fee (like "sat/kB" or "Gwei")
+   * @throws Error if we do not require tx fee for this currency
    */
   getFeeOptionUnit(): string;
 
   /**
    * If this currency does not require user to choose a fee option, then this
-   * function is a dummy function that always return true.  If this currency
-   * requires user to choose a fee option for a transaction, then this
-   * function checks if the provided string is a valid fee option in an
-   * implementation-defined unit as indicated by `getFeeOptionUnit()`.
+   * function throws an Error.
+   *
+   * If this currency requires user to choose a fee option for a transaction,
+   * then this function checks if the provided string is a valid fee option in
+   * the implementation-defined unit as indicated by `getFeeOptionUnit()`.
+   * The implementation may choose to apply some sanity range checks.
    *
    * This is intended to be used to verify untrusted input from the user.
    *
    * @param network - the network to use
-   * @param feeOpt - the string that we are not sure if it is in valid format
+   * @param feeOpt - the string to check
    *
    * @returns whether the provided string is a valid fee option (impl defined)
-   * @throws Error if `network` is invalid
+   * @throws Error if `network` is invalid or if we do not require tx fee
    */
   isValidFeeOption(network: string, feeOpt: string): boolean;
 
@@ -134,7 +149,7 @@ export interface ICurrencyUtil {
    * This is intended to be used to verify untrusted input from the user.
    *
    * @param network - the network to use
-   * @param addr - the string that we are not sure if it is in valid format
+   * @param addr - the string to check
    *
    * @returns whether the provided string is a valid address
    * @throws Error if `network` is invalid
@@ -146,8 +161,7 @@ export interface ICurrencyUtil {
    *
    * This is intended to be used to verify untrusted input from the user.
    *
-   * @param network - the network to use
-   * @param amount - the string that we are not sure if it is in valid format
+   * @param amount - the string to check
    *
    * @returns whether the provided string is a valid amount in normal unit
    * @throws Error if `network` is invalid
@@ -160,13 +174,12 @@ export interface ICurrencyUtil {
    * @param amount - the string representation of the value in normal unit
    *
    * @returns the string representation of the value in base unit
-   * @throws Error if `amount` is invalid (shall pass isValidNormAmount)
+   * @throws Error if `amount` is invalid (not passing `isValidNormAmount()`)
    *
    * DISCUSSION:
-   * When would we want to use this function?  Is this function only for the
-   * `amount` argument for prepareTx()?  If that is the case, maybe we can
-   * simply do this automatically in the `prepareTx()` function altogether,
-   * and deprecate this function?
+   * Because functions like `prepareCommandSignTx()` accept amount argument
+   * with value in normal unit, rather than base unit, this function seems
+   * useless.
    */
   convertNormAmountToBaseAmount(amount: string): string;
 
@@ -176,11 +189,11 @@ export interface ICurrencyUtil {
    * @param amount - the string representation of the value in base unit
    *
    * @returns the string representation of the value in normal unit
-   * @throws Error if `amount` is invalid (shall pass _isValidBaseAmount)
+   * @throws Error if `amount` is invalid (not passing _isValidBaseAmount_)
    *
    * DISCUSSION:
-   * Maybe we can remove this function, because it seems there is no need.  If
-   * this is only used by getBalance() maybe we can do this there?
+   * Because functions like `getBalance()` returns amount with value in normal
+   * unit, rather than base unit, this function seems useless.
    */
   convertBaseAmountToNormAmount(amount: string): string;
 
@@ -190,6 +203,7 @@ export interface ICurrencyUtil {
    *
    * @param network - the network to use
    * @param addr - the address to look up
+   *
    * @throws Error if any argument is invalid
    */
   getUrlForAddr(network: string, addr: string): string;
@@ -200,13 +214,14 @@ export interface ICurrencyUtil {
    *
    * @param network - the network to use
    * @param txid - the transaction to look up
+   *
    * @throws Error if any argument is invalid
    *
    * DISCUSSION:
    * The only case where we might need this is to build history view, but that
-   * is already covered by `getRecentHistory()`.  Therefore it seems we can
-   * remove this function.  However, because this function is so simple, we
-   * can still implement it.
+   * is already covered by the return value of `getRecentHistory()`.  Thus
+   * this function seems useless.  However, because this function is so
+   * simple, we can still implement it.
    */
   getUrlForTx(network: string, txid: string): string;
 
@@ -214,8 +229,7 @@ export interface ICurrencyUtil {
    * Encode public key as an address
    *
    * @param network - the network to use
-   * @param pubkey - the standard 65-byte hex string representation of the
-   * secp256k1 public key
+   * @param pubkey - the 65-byte hex string of the secp256k1 public key
    *
    * @returns the address derived from the specified public key
    * @throws Error if any argument is invalid
@@ -225,19 +239,16 @@ export interface ICurrencyUtil {
   encodePubkeyToAddr(network: string, pubkey: string): string;
 
   /**
-   * Async return the balance in base unit, in string representation
+   * Async return the balance in normal unit, in string representation
    *
    * It is suggested that the calculate should only considers "confirmed"
    * transactions.  But the actual behavior of this function is implementation
    * defined.  Implementers should write document about their final choices.
    *
-   * API user can call convertBaseAmountToNormAmount() for human-readable
-   * format.
-   *
    * @param network - the network to use
    * @param addr - the address to look up
    *
-   * @returns the string representation of the balance in the base unit
+   * @returns the string representation of the balance in the normal unit
    * @throws Error if any argument is invalid, or if network error
    */
   getBalance(network: string, addr: string): Promise<string>;
@@ -251,25 +262,8 @@ export interface ICurrencyUtil {
 
   /**
    * Async return a list of rows representing recent history INCLUDING pending
-   * transactions.  API user can call getHistorySchema() to understand the
-   * actual schema.
-   *
-   * QUESTION:
-   * How to let the UI know a transaction is not confirmed yet?
-   *
-   * Ad-hoc design: in order to indicate whether a transaction is confirmed or
-   * not, we can have a column:
-   *
-   *      {
-   *        "key": "isConfirmed",
-   *        "label": "isConfirmed",
-   *        "format": "number"
-   *      }
-   *
-   * whose actual value must be representing by "0" or "1".
-   *
-   * Better design: We can design the interface to explicitly allow an
-   * optional boolean field just for this purpose.
+   * transactions.  API user should call `getHistorySchema()` to understand
+   * how to render the information.
    *
    * @param network - the network to use
    * @param addr - the address to look up
@@ -281,24 +275,25 @@ export interface ICurrencyUtil {
 
   /**
    * Query the current suggested fee options from 3rd-party API, if this
-   * currency needs to choose a fee option.
+   * currency needs to choose a fee option.  The results is an array of one or
+   * more options, in the unit specified by `getFeeOptionUnit()`.
    *
    * If this currency does not require user to choose a fee option, then this
-   * is a dummy implementation that resolve to an empty array immediately.
-   *
-   * This is intended to be used to verify untrusted input from the user.
+   * function returns a Promise that always rejects.
    *
    * @param network - the network to use
    *
-   * @returns a list of one or more fee options; each option is just a string
-   * representation of some value in the unit `getFeeOptionUnit()`
+   * @returns a list of one or more fee options
    * @throws Error if any argument is invalid, or if network error
    */
   getFeeOptions(network: string): Promise<string[]>;
 
   /**
-   * Return a schema that describe the ITransaction objects returned from
-   * prepareCommandSignTx()
+   * Get the schema information about how to render the ITransaction object
+   * returned from `prepareCommandSignTx()`.  The UI component can generate a
+   * view for user to compare and verify the TX information on cold wallet.
+   *
+   * @returns an array of ITransactionSchema, each encodes a field for the tx
    */
   getPreparedTxSchema(): ITransactionSchema[];
 
@@ -306,10 +301,10 @@ export interface ICurrencyUtil {
    * Async return full information for an unsigned transaction.
    *
    * @param req - the full info
-   * @returns a tuple of the encoded command to send to KelvinWallet and the
-   * transaction information to show to user
+   *
+   * @returns a pair of the signing command and printable info for this tx
    * @throws Error if any argument is invalid, or if network error, or if the
-   * request (fromAddr, toAddr, amount, feeOpt) cannot be fulfilled.
+   * request cannot be fulfilled.
    *
    */
   prepareCommandSignTx(
@@ -317,21 +312,15 @@ export interface ICurrencyUtil {
   ): Promise<[IArmadilloCommand, ITransaction]>;
 
   /**
-   * Return (serialized) signed transaction
+   * Build signed transaction that can be broadcasted.  The result string is
+   * in an implementation-defined format suitable for `submitTransaction()`.
    *
-   * @param preparedTx - the transaction signing context
+   * @param req - the original request passed to `prepareCommandSignTx()`
+   * @param preparedTx - the command to KelvinWallet
    * @param walletRsp - the response from KelvinWallet
    *
-   * @returns the serialized signed transaction, which can be passed into
-   * submitTransaction()
+   * @returns the serialized signed transaction
    * @throws Error if any argument is invalid
-   *
-   * For some currency, the protobuf response is only a fixed length ECDSA
-   * signature.  We need to build the complete signed transaction that can be
-   * broadcasted.  For BTC, do nothing.  For ETH, recover with pubkey...
-   *
-   * Return value can be in implementation-defined format (not necessarily hex
-   * string).
    */
   buildSignedTx(
     req: ISignTxRequest,
@@ -343,7 +332,7 @@ export interface ICurrencyUtil {
    * Submit a signed transaction to the blockchain
    *
    * @param network - the network to use
-   * @param signedTx - serialized signed transaction from buildSignedTx
+   * @param signedTx - serialized signed transaction from `buildSignedTx()`
    *
    * @returns the txid of the transaction you just submitted
    * @throws Error if any argument is invalid, or if network error
@@ -355,6 +344,8 @@ export interface ICurrencyUtil {
    *
    * @param network - the network to use
    * @param accountIndex - the index of an account (should be 0, 1, 2, 3, ...)
+   *
+   * @returns the public export command
    */
   prepareCommandGetPubkey(
     network: string,
@@ -362,13 +353,22 @@ export interface ICurrencyUtil {
   ): IArmadilloCommand;
 
   /**
-   * Return a hex string representation of a 65-byte pubkey, extracted from
-   * the response to the command generated by `prepareCommandGetPubkey()`.
+   * Extract the public key from a response generated by KelvinWallet to the
+   * command generated by `prepareCommandGetPubkey()`.
+   *
+   * @param walletRsp - the response from KelvinWallet
+   *
+   * @returns the 65-byte hex string of the secp256k1 public key
    */
   parsePubkeyResponse(walletRsp: IArmadilloResponse): string;
 
   /**
    * Return the encoded command to send to KelvinWallet, to show an address
+   *
+   * @param network - the network to use
+   * @param accountIndex - the index of an account (should be 0, 1, 2, 3, ...)
+   *
+   * @returns the show address command
    */
   prepareCommandShowAddr(
     network: string,
@@ -376,7 +376,7 @@ export interface ICurrencyUtil {
   ): IArmadilloCommand;
 
   /**
-   * Allow more properties to be attached to the object.
+   * Allow more implementation-defined properties to be attached.
    */
   [k: string]: any;
 }

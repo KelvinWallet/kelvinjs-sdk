@@ -19,6 +19,8 @@ declare class SampleCli extends Command {
         amount: flags.IOptionFlag<string>;
         fee: flags.IOptionFlag<string>;
         tx: flags.IOptionFlag<string>;
+        tokenaddr: flags.IOptionFlag<string>;
+        tokensymbol: flags.IOptionFlag<string>;
     };
     run(): Promise<void>;
 }

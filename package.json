@@ -1,6 +1,6 @@
 {
   "name": "kelvinjs-sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "kelvinjs-sdk",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -20,15 +20,20 @@
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
-    "kelvinjs-eth": "git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.0.0",
+    "kelvinjs-bch": "git+https://github.com/KelvinWallet/kelvinjs-bch.git#v1.0.0",
+    "kelvinjs-btc": "git+https://github.com/KelvinWallet/kelvinjs-btc.git#v1.0.0",
+    "kelvinjs-eth": "git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.1.0",
+    "kelvinjs-ltc": "git+https://github.com/KelvinWallet/kelvinjs-ltc.git#v1.0.0",
+    "kelvinjs-trx": "git+https://github.com/KelvinWallet/kelvinjs-trx.git#v1.0.0",
     "kelvinjs-usbhid": "git+https://github.com/KelvinWallet/kelvinjs-usbhid.git#v1.0.0",
+    "kelvinjs-xrp": "git+https://github.com/KelvinWallet/kelvinjs-xrp.git#v1.0.0",
     "tslib": "^1"
   },
   "devDependencies": {
     "@types/node": "^10",
-    "gts": "^1.1.0",
+    "gts": "1.1.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.4"
   },
   "scripts": {
     "fix": "gts fix",
