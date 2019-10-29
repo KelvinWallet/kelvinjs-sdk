@@ -6,6 +6,9 @@ Use Node.js to interact with KelvinWallet.
 
 - Node.js v10
 - Yarn
+    - Remember to update your environment variable `PATH`
+      according to https://yarnpkg.com/en/docs/cli/global
+      so that the output of `yarn global bin` is included
 
 ## Install the Sample CLI
 
