@@ -2,46 +2,89 @@
 
 Use Node.js to interact with KelvinWallet.
 
-## Prerequisite
+This project provides a reference implementation of the KelvinWallet TypeScript
+SDK which includes a CLI tool `kelvin` so that you can execute some quick shell
+commands under your command prompts to interact with KelvinWallet USB devices
+without writing extra code.
+
+## Set Up Your Environment
+
+Make sure your environment is properly set up following the instructions below
+
+### Prerequisite
 
 - Node.js v10
+    - We need Node.js because the command line tool for interacting with
+      KelvinWallet is a Node.js project whose source is written in TypeScript;
+      currently only v10 is supported because of backward incompatible breaking
+      changes introduced in new versions.
+    - Run `node --version` to check if you have Node.js v10 installed
 - Yarn
-    - Remember to update your environment variable `PATH`
-      according to https://yarnpkg.com/en/docs/cli/global
-      so that the output of `yarn global bin` is included
+    - We need Yarn because this Node.js project use Yarn to manage package dependencies.
+    - Run `yarn --version` to check if you have Yarn installed
+- Python 3
+    - We need Python because some dependencies in this project require building
+      binary with Python scripts unfortunately.
+    - Run `python3 --version` to check if you have Python 3 installed
+- (optional) Git
+    - Run `git --version` to check if you have Git installed
 
-## Install the Sample CLI
+### Install the CLI
 
-1.  Clone this repo and switch working directory to the root of this repo
+1.  Download this repository and switch working directory to the root of this repo
+
+    - If you already have `git`:
+        - Just clone it: `git clone https://github.com/KelvinWallet/kelvinjs-sdk`
+        - Then cd into it: `cd kelvinjs-sdk`
+
+    - If you don't have `git`:
+        - Download [the latest master branch ZIP archive](https://github.com/KelvinWallet/kelvinjs-sdk/archive/master.zip) from GitHub
+        - Extract the folder kelvinjs-sdk-master from the ZIP file
+        - Then cd into it: `cd kelvinjs-sdk-master`
 
 2.  Install all dependencies of this package
+
     ```
-    yarn
+    yarn install --ignore-optional
     ```
 
-3.  Symlink the executable `kelvin` into a directory in PATH managed by yarn
-    ```
-    yarn link
-    ```
+3.  Check if `bin/kelvin` is ready to run:
 
-4.  Check if `kelvin` is successfully installed
-    ```
-    kelvin --version
-    ```
+    - If you are on Linux or macOS:
+        ```
+        bin/kelvin --version
+        ```
 
-## If You Modify the Source Code
+    - If you are on Windows:
+        ```
+        bin\kelvin --version
+        ```
 
-1.  Lint the TypeScript project
-    ```
-    yarn lint
-    ```
+Now you are ready to interact with KelvinWallet.
 
-2.  Compile the TypeScript project
-    ```
-    yarn build
-    ```
+## Important Notes about Path to the `kelvin` Script
 
-## Sample CLI Overview
+In the following sections, we will talk about some `kelvin` CLI commands.
+
+However, if you don't change your "PATH" environment variable, running `kelvin`
+commands directly in your command prompt will fail with an error message like
+`kelvin: command not found` or `'kelvin' is not recognized as an internal or
+external command, operable program or batch file.`.
+
+Whenever you want to run a `kelvin ...` command, you should use a relative path
+or an absolute path to refer to the actual `kelvin` script in this project.
+
+You should:
+
+1. use full path like `/home/user/kelvinjs-sdk/bin/kelvin` or `C:\Users\user\kelvinjs-sdk\bin\kelvin`, or
+2. always remember to `cd` into this project directory first, then use `bin/kelvin` (or `bin\kelvin` on Windows), or
+3. just add the path (the "bin" folder) to your PATH environment variable
+
+TLDR: *When you see a command like `kelvin eth kovan getpubkey`, you might need
+to run it as `your/path/to/kelvin eth kovan getpubkey` depending on your actual
+setup.*
+
+## CLI Overview
 
 ```
 kelvin CURRENCY NETWORK ACTION [OPTIONS ...]
@@ -84,7 +127,7 @@ Available OPTIONS include:
     --tokensymbol         required when CURRENCY is erc20
 ```
 
-## Sample CLI Usage
+## CLI Usage Examples
 
 You need to connect (via a USB cable) and unlock your KelvinWallet before
 running commands with ACTION being `showaddr`, `getpubkey`, or `signtx`
@@ -234,3 +277,15 @@ kelvin xrp testnet broadcast \
 kelvin trx testnet broadcast \
     --tx '{"visible":false,"txID":"29a3bddcbfc6aba82f8bc874182289611b9049b667867f107d9d70d93205b5ba","raw_data":{"contract":[{"parameter":{"value":{"amount":10000000,"owner_address":"419f201aeb48b1e25c30a211ccf801fda41128478e","to_address":"4164f9dbbd04dc82e030bbe7da69907a0230265120"},"type_url":"type.googleapis.com/protocol.TransferContract"},"type":"TransferContract"}],"ref_block_bytes":"a7c0","ref_block_hash":"8ffc26ab7b39a1b9","expiration":1571303373759,"timestamp":1571299773759},"raw_data_hex":"0a02a7c022088ffc26ab7b39a1b940bff7eac7dd2d5a68080112640a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412330a15419f201aeb48b1e25c30a211ccf801fda41128478e12154164f9dbbd04dc82e030bbe7da69907a02302651201880ade20470bf9a8fc6dd2d","signature":["c4bce95674ec2d39f238eb606b7f080fb5a5dd5fa01b70beb2d9b09f6cfda0cc2abe235eaf44e00e3714aee1d7fc5fc623c11d2be4a7a3e64d057eaa3e98bb2900"]}'
 ```
+
+## If You Modify the Source Code
+
+1.  Lint the TypeScript project
+    ```
+    yarn lint
+    ```
+
+2.  Compile the TypeScript project
+    ```
+    yarn build
+    ```
