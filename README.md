@@ -25,7 +25,6 @@ Make sure your environment is properly set up following the instructions below
 - Python 3
     - We need Python because some dependencies in this project require building
       binary with Python scripts unfortunately.
-    - Run `python3 --version` to check if you have Python 3 installed
 - (optional) Git
     - Run `git --version` to check if you have Git installed
 
