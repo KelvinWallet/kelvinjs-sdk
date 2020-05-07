@@ -22,25 +22,19 @@ Make sure your environment is properly set up following the instructions below
 - Yarn
     - We need Yarn because this Node.js project use Yarn to manage package dependencies.
     - Run `yarn --version` to check if you have Yarn installed
-- Python 3
-    - We need Python because some dependencies in this project require building
-      binary with Python scripts unfortunately.
 - Git
     - We need Git to download source code packages from GitHub
     - Run `git --version` to check if you have Git installed
+- Python 3
+    - We need Python because some dependencies in this project require building
+      binary with Python scripts unfortunately.
 
 ### Install the CLI
 
 1.  Download this repository and switch working directory to the root of this repo
 
-    - If you already have `git`:
-        - Just clone it: `git clone https://github.com/KelvinWallet/kelvinjs-sdk`
-        - Then cd into it: `cd kelvinjs-sdk`
-
-    - If you don't have `git`:
-        - Download [the latest master branch ZIP archive](https://github.com/KelvinWallet/kelvinjs-sdk/archive/master.zip) from GitHub
-        - Extract the folder kelvinjs-sdk-master from the ZIP file
-        - Then cd into it: `cd kelvinjs-sdk-master`
+    - Just clone it: `git clone https://github.com/KelvinWallet/kelvinjs-sdk`
+    - Then cd into it: `cd kelvinjs-sdk`
 
 2.  Install all dependencies of this package
 
