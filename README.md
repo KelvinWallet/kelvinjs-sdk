@@ -56,7 +56,9 @@ Make sure your environment is properly set up following the instructions below
 
 Now you are ready to interact with KelvinWallet.
 
-## Important Notes about Path to the `kelvin` Script
+## Important Notes on How We Describe `kelvin` Commands
+
+### Path to the `kelvin` Script
 
 In the following sections, we will talk about some `kelvin` CLI commands.
 
@@ -77,6 +79,40 @@ You should:
 TLDR: *When you see a command like `kelvin eth kovan getpubkey`, you might need
 to run it as `your/path/to/kelvin eth kovan getpubkey` depending on your actual
 setup.*
+
+### Multi-Line Command
+
+Sometimes when a command is too long, we will break it into multiple lines.
+
+In this document, we use the UNIX convention: a backslash (`\`) character to
+escape the following new line character.  Therefore a multi-line command will
+look like:
+
+```
+kelvin erc20 kovan signtx \
+    --tokensymbol WETH \
+    --tokenaddr 0xd0A1E359811322d97991E03f863a0C30C2cF029C \
+    --account 1 \
+    --pubkey 04fd089bf63b7bafe29f91e52becbf3e62d4959513dfce131852b80fa4f288cd410fb3711030bdae62ae94784f09e55329bcc3214e907982bc8c51f0d09c1f28d2 \
+    --to 0xFF7886d2441F24c364ca2b6b93E306C1F48ecF12 \
+    --amount 0.0001 \
+    --fee 1
+```
+
+However, if you are in a Windows Command Prompt, you need to use a caret (`^`)
+character for this purpose instead.  Therefore the same command should be read
+as:
+
+```
+kelvin erc20 kovan signtx ^
+    --tokensymbol WETH ^
+    --tokenaddr 0xd0A1E359811322d97991E03f863a0C30C2cF029C ^
+    --account 1 ^
+    --pubkey 04fd089bf63b7bafe29f91e52becbf3e62d4959513dfce131852b80fa4f288cd410fb3711030bdae62ae94784f09e55329bcc3214e907982bc8c51f0d09c1f28d2 ^
+    --to 0xFF7886d2441F24c364ca2b6b93E306C1F48ecF12 ^
+    --amount 0.0001 ^
+    --fee 1
+```
 
 ## CLI Overview
 
