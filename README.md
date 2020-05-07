@@ -54,6 +54,17 @@ Make sure your environment is properly set up following the instructions below
         bin\kelvin --version
         ```
 
+4. If you are on Linux, you need to add a file
+   /etc/udev/rules.d/50-kelvinwallet.rules with the following content:
+
+    ```
+    SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="5750", MODE="0666", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5750", MODE="0666", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
+    ```
+
+   With these udev settings, you will be able to access the KelvinWallet USB
+   device without running commands as root later.
+
 Now you are ready to interact with KelvinWallet.
 
 ## Important Notes on How We Describe `kelvin` Commands
