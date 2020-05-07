@@ -25,7 +25,8 @@ Make sure your environment is properly set up following the instructions below
 - Python 3
     - We need Python because some dependencies in this project require building
       binary with Python scripts unfortunately.
-- (optional) Git
+- Git
+    - We need Git to download source code packages from GitHub
     - Run `git --version` to check if you have Git installed
 
 ### Install the CLI
