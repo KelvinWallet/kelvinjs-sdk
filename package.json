@@ -1,6 +1,6 @@
 {
   "name": "kelvinjs-sdk",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "kelvinjs-sdk",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -22,7 +22,7 @@
     "@oclif/plugin-help": "2.2.1",
     "kelvinjs-bch": "git+https://github.com/KelvinWallet/kelvinjs-bch.git#v1.0.5",
     "kelvinjs-btc": "git+https://github.com/KelvinWallet/kelvinjs-btc.git#v1.0.2",
-    "kelvinjs-eth": "git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.1.3",
+    "kelvinjs-eth": "git+https://github.com/KelvinWallet/kelvinjs-eth.git#v1.2.0",
     "kelvinjs-ltc": "git+https://github.com/KelvinWallet/kelvinjs-ltc.git#v1.0.2",
     "kelvinjs-trx": "git+https://github.com/KelvinWallet/kelvinjs-trx.git#v1.0.3",
     "kelvinjs-usbhid": "git+https://github.com/KelvinWallet/kelvinjs-usbhid.git#v1.0.3",

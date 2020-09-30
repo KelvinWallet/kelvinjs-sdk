@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+const SampleCli = require('../lib/ethsignhash');
+const oclifErrorHandler = require('@oclif/errors/handle');
+SampleCli.run().catch(oclifErrorHandler);
