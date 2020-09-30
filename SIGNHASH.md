@@ -14,19 +14,25 @@ The result signature length is 64 bytes, which is just the concatenation of two
 re-encode the signature into some different format (such as ASN.1 DER) for your
 application use case.
 
-The sample CLI usage would look like this:
+## How to
 
 ```
+# Step 0 - Set up your KelvinWallet device
 
-$ ./bin/kelvin eth mainnet getpubkey --account 7
-your pubkey for account 7 is:
-04f6fd46a05241788376436c138e010d47c872d0014a44391ef3922ec4b83dc929279ff535cd16f4821d6e7406d4c0af06c2d27c7294b69977b9105f317e81962f
+# Step 1 - Clone the git repo
+git clone https://github.com/KelvinWallet/kelvinjs-sdk
+cd kelvinjs-sdk
 
+# Step 2 - Install dependencies
+yarn
 
-$ ./bin/ethsignhash -i 7 8ad2438ec20b287d59e906a41875ecd82385c0e572fe74014c57df5a658e0d08
-Asking KelvinWallet to derive private key for path m/44'/60'/0'/0/7 and sign the 32-byte digest:
-    8AD2438EC20B287D59E906A41875ECD82385C0E572FE74014C57DF5A658E0D08
-KelvinWallet returned 64-byte secp256k1 ECDSA signature:
-    1BA390374E4B118D019BD414405A816C2BB4A2651EECC7DAE5FB2950584626987E75D9D108C25A8049E33EB2338C02C04EC531BA3DA79CA034C6BC206FD39F3D
+# Step 3 - Plug in KelvinWallet, unlock it, navigate to the "Ready to approve transaction" screen
 
+# Step 4 - Run the following command to check the public key for m/44'/60'/0'/0/{i} where x = 7
+./bin/kelvin eth mainnet getpubkey --account 7
+
+# Step 5 - Run the following command to sign the specified hash using m/44'/60'/0'/0/{x}
+./bin/ethsignhash -i 7 A0A1A2A3A4A5A6A7A8A9AAABACADAEAFB0B1B2B3B4B5B6B7B8B9BABBBCBDBEBF
+
+# Step 6 - verify the secp256k1 ECDSA signature you got using the corresponding public key
 ```
